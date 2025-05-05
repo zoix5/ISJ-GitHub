@@ -66,14 +66,8 @@ def zobraz_trenerov():
 
     conn.close()
 
-    # Jednoduchý textový výpis trénerov a ich kurzov
-    vystup = "<h2>Zoznam trénerov a kurzov:</h2>"
-    for trener in treneri:
-        vystup += f"<p>{trener}</p>"
-
-    # Odkaz na návrat
-    vystup += '<a href="/">Späť</a>'
-    return vystup
+    
+    return render_template("treneri.html",treneri=treneri)
 
 
 
@@ -90,14 +84,8 @@ def zobraz_miesta():
 
     conn.close()
 
-    # Jednoduchý textový výpis miest
-    vystup = "<h2>Zoznam miest:</h2>"
-    for miesto in miesta:
-        vystup += f"<p>{miesto}</p>"
-
-    # Odkaz na návrat
-    vystup += '<a href="/">Späť</a>'
-    return vystup
+    
+    return render_template("miesta.html",miesta=miesta)
 
 
 
@@ -115,14 +103,8 @@ def vypis_kapacity():
 
     conn.close()
 
-    # Jednoduchý textový výpis kapacity
-    vystup = "<h2>Zoznam miest:</h2>"
-    for kapacita in kapacity:
-        vystup += f"<p>{kapacita}</p>"
-
-    # Odkaz na návrat
-    vystup += '<a href="/">Späť</a>'
-    return vystup
+    
+    return render_template("kapacity.html",kapacity=kapacity)
 
 
 
