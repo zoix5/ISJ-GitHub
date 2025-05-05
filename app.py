@@ -1,4 +1,3 @@
-# Je NUTNÉ nainštalovať alíček: do konzoly napíšte "pip install flask"
 from flask import Flask, request, render_template
 import sqlite3
 import hashlib
@@ -6,22 +5,16 @@ import hashlib
 app = Flask(__name__)
 
 
-# rýchly úvod do HTML elementov:
-# <h1> ...text... </h1>, alebo <h2>             - heading - nadpisy
-# <p> ...text... </p>                           - paragraf (normálny text)
-# <a href="www.---.com"> ...text...></a>        - odkaz (v rámci textu)
-# <button> ...text... </button>                 - tlačidlo s textom
 
 
-# Pripojenie k databáze
 def pripoj_db():
     conn = sqlite3.connect("kurzy.db")
     return conn
 
 
-@app.route('/')  # API endpoint
+@app.route('/')
 def index():
-    # Úvodná homepage s dvoma tlačidami ako ODKAZMI na svoje stránky - volanie API nedpointu
+    
     return '''
         <h1>Výber z databázy</h1>
         <a href="/kurzy"><button>Zobraz všetky kurzy</button></a>
@@ -35,9 +28,7 @@ def index():
 
 
 
-
-# PODSTRÁNKA NA ZOBRAZENIE KURZOV
-@app.route('/kurzy')  # API endpoint
+@app.route('/kurzy')
 def zobraz_kurzy():
     conn = pripoj_db()
     cursor = conn.cursor()
@@ -47,13 +38,13 @@ def zobraz_kurzy():
 
     conn.close()
 
-    # Jednoduchý textový výpis kurzov
+
     return render_template("kurzy.html",kurzy=kurzy)
 
 
 
-# PODSTRÁNKA NA ZOBRAZENIE TRÉNEROV
-@app.route('/treneri')  # API endpoint
+
+@app.route('/treneri')
 def zobraz_trenerov():
     conn = pripoj_db()
     cursor = conn.cursor()
@@ -72,7 +63,7 @@ def zobraz_trenerov():
 
 
 
-@app.route('/miesta')  # API endpoint
+@app.route('/miesta')
 def zobraz_miesta():
     conn = pripoj_db()
     cursor = conn.cursor()
@@ -91,7 +82,7 @@ def zobraz_miesta():
 
 
 
-@app.route('/kapacity')  # API endpoint
+@app.route('/kapacity')
 def vypis_kapacity():
     conn = pripoj_db()
     cursor = conn.cursor()
@@ -111,37 +102,13 @@ def vypis_kapacity():
 
 @app.route('/registracia', methods=['GET'])
 def registracia_form():
-    return '''
-        <h1>Registrácia trenéra</h1>
-
-        <form action="/registracia" method="post">
-
-            <label>Meno:</label><br>
-            <input type="text" name="meno" required><br><br>
-
-            <label>Priezvisko:</label><br>
-            <input type="text" name="priezvisko" required><br><br>
-
-            
-            <label>Telefón:</label><br>
-            <input type="text" name="telefon" required><br><br>
-
-            <label>Špecializácia:</label><br>
-            <input type="text" name="specializacia" required><br><br>
-
-            <label>Heslo:</label><br>
-            <input type="text" name="heslo" required><br><br>
-
-            <button type="submit">Registrovať</button>
-
-        </form>
-        <hr>
-        <a href="/">Späť</a>
-    '''
 
 
-# API ENDPOINT NA SPRACOVANIE REGISTRÁCIE. Mapuje sa na mená elementov z formulára z predošlého requestu (pomocou request.form[...])
-# Pozor - metóda je POST
+
+    return render_template("registracia.html")
+
+
+
 @app.route('/registracia', methods=['POST'])
 def registracia_trenera():
 
@@ -153,7 +120,7 @@ def registracia_trenera():
     hashed = hashlib.sha256(heslo.encode()).hexdigest()
 
 
-    # Zápis do databázy
+
     conn = pripoj_db()
     cursor = conn.cursor()
     cursor.execute("INSERT INTO Treneri (Meno, Priezvisko, Specializacia, Telefon, Heslo) VALUES (?, ?, ?, ?, ?)", 
@@ -161,7 +128,7 @@ def registracia_trenera():
     conn.commit()
     conn.close()
 
-    # Hlásenie o úspešnej registrácii
+
     return '''
         <h2>Tréner bol úspešne zaregistrovaný!</h2>
         <hr>
@@ -171,30 +138,11 @@ def registracia_trenera():
 
 @app.route('/pridajkurz', methods=['GET'])
 def pridaj_form():
-    return '''
-        <h1>Pridanie kurzu</h1>
 
-        <form action="/pridajkurz" method="post">
 
-        
-            <label>Názov kurzu:</label><br>
-            <input type="text" name="nazov_kurzu" required><br><br>
 
-            <label>Typ športu:</label><br>
-            <input type="text" name="typ_sportu" required><br><br>
 
-            <label>Max počet účastníkov:</label><br>
-            <input type="text" name="max_pocet_ucastnikov" required><br><br>
-
-            <label>ID trenéra:</label><br>
-            <input type="text" name="id_trenera" required><br><br>
-
-            <button type="submit">Pridať</button>
-
-        </form>
-        <hr>
-        <a href="/">Späť</a>
-    '''
+    return render_template("pridajkurz.html")
 
 
 def sifrovanie(text):
@@ -249,4 +197,3 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-# Aplikáciu spustíte, keď do konzoly napíšete "python app.py"
