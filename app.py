@@ -1,5 +1,5 @@
 # Je NUTNÉ nainštalovať alíček: do konzoly napíšte "pip install flask"
-from flask import Flask, request
+from flask import Flask, request, render_template
 import sqlite3
 import hashlib
 
@@ -48,13 +48,7 @@ def zobraz_kurzy():
     conn.close()
 
     # Jednoduchý textový výpis kurzov
-    vystup = "<h2>Zoznam kurzov:</h2>"  # nadpis <h2>
-    for kurz in kurzy:
-        vystup += f"<p>{kurz}</p>"      # výpis kurzov do paragrafov <p>
-
-    # Odkaz na návrat
-    vystup += '<a href="/">Späť</a>'    # k výstupu (+) pridáme odkaz s textom "Späť", ktorý odkazuje na stránku "/", teda homepage
-    return vystup
+    return render_template("kurzy.html",kurzy=kurzy)
 
 
 
