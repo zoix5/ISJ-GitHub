@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Pridajkurz</title>
+    <link rel=" stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 
 <body>
-    <h1>Pridanie kurzu</h1>
+    <h2>Pridanie kurzu</h2>
 
         <form action="/pridajkurz" method="post">
 
@@ -23,7 +24,7 @@
             <label>ID trenéra:</label><br>
             <input type="text" name="id_trenera" required><br><br>
 
-            <button type="submit">Pridať</button>
+            <button class= buttonheh type="submit">Pridať</button>
 
         </form>
         <hr>
