@@ -120,11 +120,7 @@ def registracia_trenera():
     conn.close()
 
 
-    return '''
-        <h2>Tréner bol úspešne zaregistrovaný!</h2>
-        <hr>
-        <a href="/">Späť</a>
-    '''
+    return render_template("asi_zbytocne1.html")
 
 
 @app.route('/pridajkurz', methods=['GET'])
@@ -176,11 +172,7 @@ def pridaj_kurz():
     conn.close()
 
 
-    return '''
-        <h2>Kurz bol úspešne pridaný!</h2>
-        <hr>
-        <a href="/">Späť</a>
-    '''
+    return render_template("asi_zbytocne2.html")
 
 
 
