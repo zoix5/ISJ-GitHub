@@ -3,7 +3,8 @@ html  {
 }
 
 
-h2 {
+
+h1 {
     color: rgb(205, 80, 101);
     font-family: Arial, Helvetica, sans-serif;
     font-size: 28px;
@@ -12,7 +13,16 @@ h2 {
     text-transform: uppercase;
 
 
-    
+}
+
+h2 {
+    color: rgb(205, 80, 101);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    text-align: center;
+    margin-top: 40px;
+    text-transform: uppercase;
+
 
 }
 
@@ -41,6 +51,11 @@ p {
     .buttonheh:active {
     background: #144E75; }
 
+
+a {
+    color: aqua;
+    font-size: 20px;
+}
 
 
 

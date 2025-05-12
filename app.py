@@ -15,16 +15,7 @@ def pripoj_db():
 @app.route('/')
 def index():
     
-    return '''
-        <h1>Výber z databázy</h1>
-        <a href="/kurzy"><button>Zobraz všetky kurzy</button></a>
-        <a href="/treneri"><button>Zobraz všetkých trénerov</button></a>
-        <a href="/miesta"><button>Zobraz miesta</button></a>
-        <a href="/kapacity"><button>Zobraz kapacitu</button></a>
-        <a href="/registracia"><button>Registruj Trenéra</button></a>
-        <a href="/pridajkurz"><button>Pridaj kurz</button></a>
-        <hr>
-    '''
+    return render_template("stranka.html")
 
 
 
