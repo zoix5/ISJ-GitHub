@@ -1,8 +1,17 @@
 from flask import Flask, request, render_template
 import sqlite3
 import hashlib
+from flask_sqlalchemy import SQLAlchemy
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
+
+
+db_path = os.path.join(app.instance_path, "kurzy.db")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite///{db_path}".replace("\\","/")
+app.config["SQALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app)
 
 
 
@@ -18,22 +27,41 @@ def index():
     return render_template("stranka.html")
 
 
+#---------------------------------------------SqlAlchemy model -----------------------------------------------------------
 
+class Kurz(db.Model):
+    __tableNAME__ = "Kurzy"
+    ID_kurzu              = db.Column(db.Integer, primary_key=True)
+    Nazov_kurzu           = db.Column(db.String, nullable=False)
+    Typ_sportu            = db.Column(db.String)
+    Max_pocet_ucastnikov  = db.Column(db.Integer)
+    ID_trenera            = db.Column(db.Integer)
+
+    def __ref__(self):
+        return f"<Kurz {self.Nazov_kurzu}>"
+
+#--------------------------------------------------------------------------------------------------------------------------
+
+
+#---------------------------------------------- Zobraz Kurzy --------------------------------------------------------------
 @app.route('/kurzy')
 def zobraz_kurzy():
+
+    '''
     conn = pripoj_db()
     cursor = conn.cursor()
-
     cursor.execute("SELECT * FROM Kurzy")
     kurzy = cursor.fetchall()
-
     conn.close()
 
+    '''
 
+    kurzy = Kurz.query.all()
     return render_template("kurzy.html",kurzy=kurzy)
 
+#-----------------------------------------------------------------------------------------------------------------------------
 
-
+#---------------------------------------------- Zobraz Trenérov -------------------------------------------------------------- 
 
 @app.route('/treneri')
 def zobraz_trenerov():
@@ -52,6 +80,9 @@ def zobraz_trenerov():
     return render_template("treneri.html",treneri=treneri)
 
 
+#--------------------------------------------------------------------------------------------------------------------------
+
+#---------------------------------------------- Zobraz Miesta --------------------------------------------------------------
 
 
 @app.route('/miesta')
@@ -70,7 +101,9 @@ def zobraz_miesta():
     return render_template("miesta.html",miesta=miesta)
 
 
+#--------------------------------------------------------------------------------------------------------------------------
 
+#---------------------------------------------- Zobraz Kapacitu --------------------------------------------------------------
 
 
 @app.route('/kapacity')
@@ -88,7 +121,9 @@ def vypis_kapacity():
     
     return render_template("kapacity.html",kapacity=kapacity)
 
+#--------------------------------------------------------------------------------------------------------------------------
 
+#---------------------------------------------- Registrácia ---------------------------------------------------------------
 
 
 @app.route('/registracia', methods=['GET'])
@@ -121,6 +156,12 @@ def registracia_trenera():
 
 
     return render_template("asi_zbytocne1.html")
+
+
+#--------------------------------------------------------------------------------------------------------------------------
+
+
+#---------------------------------------------- Pridaj kurz ---------------------------------------------------------------
 
 
 @app.route('/pridajkurz', methods=['GET'])
@@ -174,7 +215,7 @@ def pridaj_kurz():
 
     return render_template("asi_zbytocne2.html")
 
-
+#--------------------------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
