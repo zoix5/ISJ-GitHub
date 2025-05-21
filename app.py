@@ -9,8 +9,8 @@ app = Flask(__name__, instance_relative_config=True)
 
 db_path = os.path.join(app.instance_path, "kurzy.db")
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite///{db_path}".replace("\\","/")
-app.config["SQALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}".replace("\\","/")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
@@ -30,15 +30,45 @@ def index():
 #---------------------------------------------SqlAlchemy model -----------------------------------------------------------
 
 class Kurz(db.Model):
-    __tableNAME__ = "Kurzy"
+    __tablename__ = "Kurzy"
     ID_kurzu              = db.Column(db.Integer, primary_key=True)
     Nazov_kurzu           = db.Column(db.String, nullable=False)
     Typ_sportu            = db.Column(db.String)
     Max_pocet_ucastnikov  = db.Column(db.Integer)
     ID_trenera            = db.Column(db.Integer)
 
-    def __ref__(self):
+    def __repr__(self):
         return f"<Kurz {self.Nazov_kurzu}>"
+
+
+
+
+class Trener(db.Model):
+    __tablename__ = "Treneri"
+    ID_trenera              = db.Column(db.Integer, primary_key=True)
+    Meno                    = db.Column(db.String, nullable=False)
+    Priezvisko              = db.Column(db.String)
+    Specializacia           = db.Column(db.String)
+    Telefon                 = db.Column(db.String)
+
+    def __repr__(self):
+        return f"<Trener {self.Meno}>"
+    
+
+
+class Miesto(db.Model):
+    __tablename__ = "Miesta"
+    ID_miesta              = db.Column(db.Integer, primary_key=True)
+    Nazov_miesta           = db.Column(db.Integer, nullable=False)
+
+
+    def __repr__(self):
+        return f"<Miesto {self.Nazov_miesta}>"
+    
+
+
+
+
 
 #--------------------------------------------------------------------------------------------------------------------------
 
@@ -61,10 +91,14 @@ def zobraz_kurzy():
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
+
+
+
 #---------------------------------------------- Zobraz Trenérov -------------------------------------------------------------- 
 
 @app.route('/treneri')
 def zobraz_trenerov():
+    '''
     conn = pripoj_db()
     cursor = conn.cursor()
 
@@ -75,18 +109,22 @@ def zobraz_trenerov():
     treneri = cursor.fetchall()
 
     conn.close()
+    '''
 
-    
+
+    treneri = Trener.query.all()
     return render_template("treneri.html",treneri=treneri)
 
 
 #--------------------------------------------------------------------------------------------------------------------------
 
+    
 #---------------------------------------------- Zobraz Miesta --------------------------------------------------------------
 
 
 @app.route('/miesta')
 def zobraz_miesta():
+    '''
     conn = pripoj_db()
     cursor = conn.cursor()
 
@@ -96,8 +134,9 @@ def zobraz_miesta():
     miesta = cursor.fetchall()
 
     conn.close()
+    '''
 
-    
+    miesta = Miesto.query.all()
     return render_template("miesta.html",miesta=miesta)
 
 
@@ -108,6 +147,7 @@ def zobraz_miesta():
 
 @app.route('/kapacity')
 def vypis_kapacity():
+    '''
     conn = pripoj_db()
     cursor = conn.cursor()
 
@@ -117,9 +157,11 @@ def vypis_kapacity():
     kapacity = cursor.fetchall()
 
     conn.close()
+    '''
 
-    
-    return render_template("kapacity.html",kapacity=kapacity)
+
+    kurzy = Kurz.query.with_entities(Kurz.Nazov_kurzu, Kurz.Max_pocet_ucastnikov).filter(Kurz.Nazov_kurzu.like('P%')).all()
+    return render_template("kapacity.html",kapacity=kurzy)
 
 #--------------------------------------------------------------------------------------------------------------------------
 

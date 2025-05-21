@@ -10,7 +10,7 @@
         <h2>Zoznam trenerov:</h2>
     
     {% for trener in treneri: %}
-        <p>{{ trener }}</p>
+        <p>{{ trener.Meno }} {{ trener.Priezvisko}} , {{ trener.Specializacia }} , {{ trener.Telefon }} (ID: {{ trener.ID_trenera }})</p>
     {% endfor %}
         
     <a href="/">Späť</a>
